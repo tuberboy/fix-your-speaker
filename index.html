@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix Your Speaker 🔊</title>
+  <style>
+    .tone-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tone-btn.active {
+      background-color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <button class="tone-btn">Play/Pause Tone</button>
+  <script>
+    (() => {
+      let play = false;
+      let audio = null;
+      const soundBtn = document.querySelector('.tone-btn');
+      
+      soundBtn.addEventListener("click", function() {
+        if (!audio) {
+          audio = new Audio('tone.mp3');
+          audio.addEventListener('timeupdate', function() {
+            const buffer = 0.44;
+            if (this.currentTime > this.duration - buffer) {
+              this.currentTime = 0;
+              this.play();
+            }
+          });
+        }
+        play = !play;
+        if (play) {
+          audio.play();
+          soundBtn.classList.add('active');
+          return;
+        }
+        audio.pause();
+        soundBtn.classList.remove('active');
+      });
+    })();
+  </script>
+</body>
+</html>
